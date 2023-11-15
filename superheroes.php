@@ -62,9 +62,51 @@ $superheroes = [
       "biography" => "Notably powerful, Wanda Maximoff has fought both against and with the Avengers, attempting to hone her abilities and do what she believes is right to help the world.",
   ], 
 ];
+function findHero($name, $superheroes)
+{
+    if (empty($name)) {
+        $aliases = array_map(function ($hero) {
+            return $hero['alias'];
+        }, $superheroes);
 
+        return $aliases;
+    } else {
+        $name = strtolower($name);
+        foreach ($superheroes as $superhero) {
+            $alias = strtolower($superhero['alias']);
+            $heroName = strtolower($superhero['name']);
+
+            if (stripos($alias, $name) !== false || stripos($heroName, $name) !== false) {
+                return $superhero;
+            }
+        }
+        return null;
+    }
+}
+
+try {
+    $hero = [];
+    $query = isset($_GET['search']) ? $_GET['search'] : '';
+
+    // Log the query for debugging
+    error_log('Search Query: ' . $query);
+
+    if ($query !== '') {
+        $hero = findHero($query, $superheroes);
+    }
+
+    // Log the result for debugging
+    error_log('Result: ' . json_encode($hero));
+
+    // Output the result as JSON
+    echo json_encode($hero);
+} catch (Exception $e) {
+    // Log any exceptions
+    error_log('Exception: ' . $e->getMessage());
+    // Output a generic error message
+    echo json_encode(['error' => 'An error occurred.']);
+}
 ?>
-
 <ul>
 <?php foreach ($superheroes as $superhero): ?>
   <li><?= $superhero['alias']; ?></li>

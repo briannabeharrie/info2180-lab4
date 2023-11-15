@@ -1,5 +1,7 @@
 <?php
-
+header("Content-Type: application/json");
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json");
 $superheroes = [
   [
       "id" => 1,
@@ -83,7 +85,6 @@ function findHero($name, $superheroes)
         return null;
     }
 }
-
 try {
     $hero = [];
     $query = isset($_GET['search']) ? $_GET['search'] : '';
@@ -93,13 +94,13 @@ try {
     if ($query !== '') {
         $hero = findHero($query, $superheroes);
     }
-
     error_log('Result: ' . json_encode($hero));
-
     echo json_encode($hero);
+    exit();
 } catch (Exception $e) {
     error_log('Exception: ' . $e->getMessage());
     echo json_encode(['error' => 'An error occurred.']);
+    exit();
 }
 ?>
 <ul>

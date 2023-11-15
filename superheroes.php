@@ -88,22 +88,17 @@ try {
     $hero = [];
     $query = isset($_GET['search']) ? $_GET['search'] : '';
 
-    // Log the query for debugging
     error_log('Search Query: ' . $query);
 
     if ($query !== '') {
         $hero = findHero($query, $superheroes);
     }
 
-    // Log the result for debugging
     error_log('Result: ' . json_encode($hero));
 
-    // Output the result as JSON
     echo json_encode($hero);
 } catch (Exception $e) {
-    // Log any exceptions
     error_log('Exception: ' . $e->getMessage());
-    // Output a generic error message
     echo json_encode(['error' => 'An error occurred.']);
 }
 ?>
